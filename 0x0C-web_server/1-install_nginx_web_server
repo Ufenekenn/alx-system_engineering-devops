@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
+<<<<<<< HEAD
 # Bash script that configures a new Ubuntu machine
 
 apt-get update
 apt install nginx -y
 echo "Hello World!" > /var/www/html/index.html
 service nginx restart
+=======
+# Installs nginx server on an ubuntu linux distro.
+sudo apt-get update
+sudo apt-get -y install nginx
+sudo ufw allow 'Nginx HTTP'
+echo "Hello World!" > /var/www/html/index.html
+sudo start nginx
+>>>>>>> e11d0fa6cc5ea5d85a81c9d47a56068dcf5f004a
