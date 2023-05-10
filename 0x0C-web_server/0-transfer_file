@@ -1,27 +1,18 @@
 #!/usr/bin/env bash
-# A Bash script that transfers a file from a client to a server:
+# Transfers a file from our client to a server
+#
+# variables
+path="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+filename=$(basename "$BASH_SOURCE")
+brown='\e[0;33m'
+reset='\033[0m'
+file="$1"
+ip="$2"
+user="ubuntu"
+key="~/.ssh/id_rsa"
 
-# Check if at least 4 arguments are passed to the script
-if [[ "$#" -lt 4 ]]; then
-  echo "Usage: $0 PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY"
-  exit 1
+if [ $# -eq 2 ]; then
+	scp -i "$key" -o StrictHostKeyChecking=no "$path"/"$file" "$user"@"$ip":/home/"$user"/
+else
+	echo -e "Usage: ${brown}$filename PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY${reset}"
 fi
-
-# Assign the arguments to variables for readability
-
-file_path=$1
-ip=$2
-username=$3
-ssh_key=$4
-
-# Disable strict host key checking for the ssh connection
-ssh_options="-o StrictHostKeyChecking=no"
-
-# Use scp to transfer the file to the user's home directory on the remote server
-# -i option specifies the private key to use for authentication
-# $ssh_options variable sets the ssh options we need to disable strict host key checking
-# $file_path is the path to the file we want to transfer
-# $username@$ip specifies the user and IP of the remote server we want to transfer the file to
-# :~ specifies the user's home directory on the remote server
-
-scp -i "$ssh_key" $ssh_options "$file_path" "$username@$ip":~
