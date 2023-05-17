@@ -52,8 +52,8 @@ frontend ufenekenn_https
 backend web-backend
 	balance roundrobin
    	redirect scheme https if !{ ssl_fc }
-   	server web-01 52.207.208.24:80 check
-   	server web-02 34.229.254.194:80 check
+   	server 180781-web-01 34.234.201.139:80 check
+   	server 180781-web-02 34.207.62.236:80 check
 
 backend letsencrypt-backend
    	server letsencrypt 127.0.0.1:54321
