@@ -7,8 +7,10 @@ current_date=$(date +'%d-%m-%Y')
 # Get the password
 password=$1
 
+filename="backup.sql"
+
 # create sql dump
-mysqldump -u root -p"$password" --all-databases > backup.sql
+mysqldump -u root -p"$password" --all-databases > $filename
 
 # create compressed archive
-tar -czvf "$current_date.tar.gz" backup.sql
+tar -czvf "$current_date.tar.gz" $filename
