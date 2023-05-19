@@ -1,11 +1,43 @@
 #!/usr/bin/env bash
-# generates a MySQL dump and creates a compressed archive out of it
-# Get the password from the command-line argument
-MYSQL_PASSWORD="$1"
+# Script that compress a SQL dump
+mysqldump --all-databases -u root -p"$1" > backup.sql
+tar -czvf "$(date '+%d-%m-%Y').tar.gz" backup.sql
 
-# Filename format for the backup
-FILE_NAME="$(date +"%d-%m-%Y").tar.gz"
+#!/bin/bash
 
-# Dump the MySQL databases and compress them
-mysqldump --user=root --password="$MYSQL_PASSWORD" --all-databases > backup.sql
-tar -czf "$FILE_NAME" "backup.sql"
+# Check if the password argument is provided
+if [ $# -eq 0 ]; then
+    echo "Error: Please provide the MySQL password as an argument."
+    exit 1
+fi
+
+# Set the password variable
+password="$1"
+
+# Get the current date in the desired format
+date=$(date +'%d-%m-%Y')
+
+# Set the filename for the MySQL dump
+dump_file="backup.sql"
+
+# Create the MySQL dump
+mysqldump -u root -p"$password" --all-databases > "$dump_file"
+
+# Check if the dump was created successfully
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to create MySQL dump."
+    exit 1
+fi
+
+# Compress the dump file to a tar.gz archive
+archive_file="$date.tar.gz"
+tar -czf "$archive_file" "$dump_file"
+
+# Check if the archive was created successfully
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to create archive."
+    exit 1
+fi
+
+echo "Backup created successfully: $archive_file"
+
